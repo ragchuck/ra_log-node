@@ -1,0 +1,32 @@
+{
+  "name": "ra-log",
+  "version": "1.0.0",
+  "description": "NodeJS scripts for ra-log backend. Importing SMA files etc.",
+  "main": "import-sma-file.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ragchuck/ra_log-node.git"
+  },
+  "author": "Martin Zoellner",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ragchuck/ra_log-node/issues"
+  },
+  "homepage": "https://github.com/ragchuck/ra_log-node#readme",
+  "dependencies": {
+    "shelljs": "^0.8.4",
+    "underscore": "^1.10.2",
+    "xml2js": "^0.4.23"
+  },
+  "files": [
+    "import-sma-file.js",
+    "ralog-db.js",
+    "ralog-init.js",
+    "ralog-transfer-year.js",
+    "ralog-create-design.js",
+    "ralog-config.example.json"
+  ]
+}
