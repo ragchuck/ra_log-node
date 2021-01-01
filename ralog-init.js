@@ -10,8 +10,8 @@ function initDB(dbname) {
 	db.info(function(err, body) {
 	    if (!err) {
 	        logger.info(`Databse used: [${dbname}]`);
-	    } else if (err.reason === 'no_db_file') {
-	        ralog.db.create(dbname, function(err, body) {
+	    } else if (err.error === 'not_found') {
+	        db = ralog.db.create(dbname, function(err, body) {
 	            if (err) {
 	                logger.error(`${err.error}: ${err.reason}`)
 	            } else {
@@ -21,6 +21,8 @@ function initDB(dbname) {
 	                create_design(dbname);
 	            }
 	        })
+	    } else if (err.error) {
+	        logger.error(err.error);
 	    } else if (err) {
 	        logger.error(err);
 	    }
