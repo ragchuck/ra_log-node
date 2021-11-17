@@ -18,8 +18,9 @@
   "homepage": "https://github.com/ragchuck/ra_log-node#readme",
   "dependencies": {
     "shelljs": "^0.8.4",
-    "underscore": "^1.10.2",
-    "xml2js": "^0.4.23"
+    "underscore": "^1.12.1",
+    "xml2js": "^0.4.23",
+    "path-parse": "^1.0.7"
   },
   "files": [
     "import-sma-file.js",
