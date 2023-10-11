@@ -1,11 +1,11 @@
-var logger = require('./logger');
-var ralog = require('./ralog-db');
+var logger = require('./logger.js');
+var ralog = require('./ralog-db.js');
 var transfer_year = require('./ralog-transfer-year.js');
 var create_design = require('./ralog-create-design.js');
 
 
 function initDB(dbname) {	
-	var db = ralog.use( dbname );
+	const db = ralog.use( dbname );
 
 	db.info(function(err, body) {
 	    if (!err) {
@@ -19,12 +19,16 @@ function initDB(dbname) {
 	                var year = (new Date()).getFullYear();
 	                transfer_year(year);
 	                create_design(dbname);
+					// TODO: missing create/add user "ralog" to new db 
+					// missing API: https://github.com/apache/couchdb-nano/issues/193)
 	            }
 	        })
 	    } else if (err.error) {
 	        logger.error(err.error);
+			throw err
 	    } else if (err) {
-	        logger.error(err);
+			logger.error(err);
+			throw err
 	    }
 	});
 

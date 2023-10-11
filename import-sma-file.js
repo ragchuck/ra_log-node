@@ -6,14 +6,14 @@ if (process.argv.length < 4) {
         return 1;
 }
 
-var logger = require('./logger');
-var ralog = require('./ralog-db');
+var initialize = require('./ralog-init.js')
+
 var fs = require('fs'),
     path = require('path'),
     shell = require('shelljs'),
     xml2js = require('xml2js'),
-    initialize = require('./ralog-init'),
     _ = require('underscore');
+
 
 var xml2js_opt = {
     explicitArray: false, 
@@ -30,7 +30,7 @@ var p = 0,
 while(packageName = packages.shift()) {
 
     if (!fs.existsSync(packageName)) {
-        logger.error(`File [${packageName}] not found!`);
+        console.error(`File [${packageName}] not found!`);
         continue;
     }
 
@@ -50,11 +50,10 @@ while(packageName = packages.shift()) {
             shell.rm('-rf', _tempDir);
     }
 
-    fs.mkdirSync(_tempDir);
-    fs.mkdirSync(_tempDir + '/out');
+    fs.mkdirSync(_tempDir + '/out', {recursive: true});
 
 
-    logger.info(`[${_basename}]: Unzipping ${p}/${pMax}: [${packageName}]`)
+    console.info(`[${_basename}]: Unzipping ${p}/${pMax}: [${packageName}]`)
     shell.exec(`unzip ${packageName} -d ${_tempDir}`, {silent:true});
 
     fs.readdir(_tempDir, function(err, files) { 
@@ -70,13 +69,13 @@ while(packageName = packages.shift()) {
             var xmlData = shell.exec(`unzip -p ${this.tempDir}/${file}`, {silent:true}).stdout;
             xml2js.parseString(xmlData, xml2js_opt, function (err, result) {
                 if (err) {
-                    logger.error(`[${this.basename}/${file}]: Failed to parse [${file}] with error:`, err);
+                    console.error(`[${this.basename}/${file}]: Failed to parse [${file}] with error:`, err);
                     return;
                 }
 
                 if (!result) {
-                    logger.error(`[${this.basename}/${file}]: Result is invalid`);
-                    logger.error('xmlData', xmlData);
+                    console.error(`[${this.basename}/${file}]: Result is invalid`);
+                    console.error('xmlData', xmlData);
                     return;
                 }
 
@@ -91,14 +90,14 @@ while(packageName = packages.shift()) {
             }.bind(this));
         };
 
-        logger.info(`[${this.basename}]: Parsed ${f} files`);
+        console.info(`[${this.basename}]: Parsed ${f} files`);
 
         db.bulk({docs:bulkData}, function(err, body) {
             if (!err) {
                 var result = _.countBy(body, function(row) {return row.error || 'success'});
-                logger.info(`[${this.basename}]: Import result:`, result);
+                console.info(`[${this.basename}]: Import result:`, result);
             } else {
-                logger.error(`[${this.basename}]: ${err}`, err);
+                console.error(`[${this.basename}]: ${err}`, err);
             }
 
         }.bind(this));
